@@ -1,4 +1,4 @@
-### OpenVLA
+### Gemma3 (4B)
 
 This directory contains the docker configuration files to run Gemma3-4B on RyzenAI platforms. Gemma3-4B is the smallest open-weights model released under the Gemma3 suite that offers multimodal support.
 
