@@ -1,5 +1,6 @@
+#!/bin/bash
+#
 # Copyright (C) 2025 Advanced Micro Devices, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-build_arguments:
-  - "OPENCV_VERSION=4.12.0"
+python3 test.py
