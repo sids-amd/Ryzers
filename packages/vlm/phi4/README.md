@@ -1,4 +1,4 @@
-### Microsft Phi4 Multimodal
+### Microsoft Phi 4 Multimodal
 
 This directory contains the docker configuration files to run Microsoft's Phi-4-multimodal-instruct model on RyzenAI platforms.
 
