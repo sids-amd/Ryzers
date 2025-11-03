@@ -7,16 +7,16 @@ import argparse
 from .ryzer import RyzerManager
 from .runner import DockerRunner
 
-def build(name, base_path, packages):
+def build(base_path, name, packages):
     """
     Builds the Docker images using the specified packages path and selected packages.
 
     Args:
-        name (str): The name of the Docker image to build.
         base_path (str): The base directory to scan for Dockerfiles.
+        name (str): The name of the Docker image to build.
         packages (list): List of package names to manage.
     """
-    mgr = RyzerManager(name, base_path, packages)
+    mgr = RyzerManager(base_path, name, packages)
     mgr.build()
 
 def run(name, docker_cmd):
