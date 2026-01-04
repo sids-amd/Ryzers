@@ -17,7 +17,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto", 
     torch_dtype="auto", 
     trust_remote_code=True,
-    _attn_implementation='eager',
+    _attn_implementation='sdpa',
     # _attn_implementation='flash_attention_2', # not supported on gfx1151 yet
 )
 
@@ -31,20 +31,20 @@ prompt_suffix = '<|end|>'
 
 # Part 1: Image Processing
 print("\n--- IMAGE PROCESSING ---")
-prompt = f'{user_prompt}<|image_1|>What is shown in this image?{prompt_suffix}{assistant_prompt}'
-print(f'>>> Prompt\n{prompt}')
+image_prompt = f'{user_prompt}<|image_1|>What is shown in this image?{prompt_suffix}{assistant_prompt}'
+print(f'>>> Prompt\n{image_prompt}')
 
 # Open image
 image = Image.open('/ryzers/data/toucan.jpg')
-inputs = processor(text=prompt, images=image, return_tensors='pt').to(model.device)
+mtmd_image_inputs = processor(text=image_prompt, images=image, return_tensors='pt').to(model.device)
 
 # Generate response
 generate_ids = model.generate(
-    **inputs,
+    **mtmd_image_inputs,
     max_new_tokens=1000,
     generation_config=generation_config,
 )
-generate_ids = generate_ids[:, inputs['input_ids'].shape[1]:]
+generate_ids = generate_ids[:, mtmd_image_inputs['input_ids'].shape[1]:]
 response = processor.batch_decode(
     generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False
 )[0]
@@ -54,21 +54,21 @@ print(f'>>> Response\n{response}')
 print("\n--- AUDIO PROCESSING ---")
 
 speech_prompt = "Transcribe the audio to text, and then translate the audio to French. Use <sep> as a separator between the original transcript and the translation."
-prompt = f'{user_prompt}<|audio_1|>{speech_prompt}{prompt_suffix}{assistant_prompt}'
-print(f'>>> Prompt\n{prompt}')
+audio_prompt = f'{user_prompt}<|audio_1|>{speech_prompt}{prompt_suffix}{assistant_prompt}'
+print(f'>>> Prompt\n{audio_prompt}')
 
 # Open audio file
 audio, samplerate = sf.read("/ryzers/data/audio.flac")
 
 # Process with the model
-inputs = processor(text=prompt, audios=[(audio, samplerate)], return_tensors='pt').to(model.device)
+mtmd_audio_inputs = processor(text=audio_prompt, audios=[(audio, samplerate)], return_tensors='pt').to(model.device)
 
 generate_ids = model.generate(
-    **inputs,
+    **mtmd_audio_inputs,
     max_new_tokens=1000,
     generation_config=generation_config,
 )
-generate_ids = generate_ids[:, inputs['input_ids'].shape[1]:]
+generate_ids = generate_ids[:, mtmd_audio_inputs['input_ids'].shape[1]:]
 response = processor.batch_decode(
     generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False
 )[0]
