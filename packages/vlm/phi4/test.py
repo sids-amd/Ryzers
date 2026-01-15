@@ -17,7 +17,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto", 
     torch_dtype="auto", 
     trust_remote_code=True,
-    _attn_implementation='sdpa',
+    _attn_implementation='eager',
     # _attn_implementation='flash_attention_2', # not supported on gfx1151 yet
 )
 
