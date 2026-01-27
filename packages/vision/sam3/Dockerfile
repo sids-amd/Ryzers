@@ -31,7 +31,7 @@ RUN git clone https://github.com/huggingface/transformers.git /ryzers/transforme
 COPY test.py /ryzers/test_sam3.py
 
 # Create an entrypoint to automatically login to Hugging Face
-# You need an account that has permissions to use the DinoV3 models!!
+# You need an account that has permissions to use the SAM3 models
 RUN echo -e '#!/bin/bash\n\
 if [ -n "$HF_TOKEN" ]; then\n\
   hf auth login --token "$HF_TOKEN" --add-to-git-credential\n\
